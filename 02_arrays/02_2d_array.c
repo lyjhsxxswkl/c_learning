@@ -1,15 +1,13 @@
 #include <stdio.h>
 int main(){
-    int i,j;
-    int m,n;
-    int a,b;
+    int i,j,k;
     int matrix1[4][3]={0};
     int matrix2[3][4]={0};
     int matrix3[4][4]={0};
     printf("Input the first matrix:\n");
     for (i=0;i<4;i++){
         for (j=0;j<3;j++){
-            scanf("%d",matrix1[i][j]);
+            scanf("%d",&matrix1[i][j]);
             if (j==2){
                 printf("\n");
             }
@@ -20,28 +18,26 @@ int main(){
     for (i=0;i<3;i++){
         for (j=0;j<4;j++){
             scanf("%d",&matrix2[i][j]);
-            if (j==2){
+            if (j==3){
                 printf("\n");
             }
         }
     }
-    for (m=0;m<4;m++){
-        for (n=0;n<4;n++){
-            for (i=0;i<4;i++){
-                for (j=0;j<3;j++){
-                    for (b=0;b<4;b++){
-                        for (a=0;a<3;a++){
-                            matrix3[m][n]=matrix1[i][j]*matrix2[a][b];
-                        }
-                    }
-                }
+    for (i=0;i<4;i++){
+        for (j=0;j<4;j++){
+            matrix3[i][j]=0;
+            for (k=0;k<3;k++){
+                matrix3[i][j]+=matrix1[i][k]*matrix2[k][j];
             }
         }
     }
     printf("Your result is:\n");
-    for (m=0;m<4;m++){
-        for (n=0;n<4;n++){
-            printf("%d",matrix3[m][n]);
+    for (i=0;i<4;i++){
+        for (j=0;j<4;j++){
+            printf("%d ",matrix3[i][j]);
+            if (j==3){
+                printf("\n");
+            }
         }
     }
 }
