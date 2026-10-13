@@ -21,7 +21,7 @@ int main(){
             else if (x<=0||y<=0||n<=0){
                 puts("\nPlease Enter a number greater than 0,thanks. :)\n");
             }
-        }while(x>100||y>100||n>100||x<=0||y<=0||n<=0);
+        }while(x>MAX_ROW||y>MAX_COL||n>MAX_COL||x<=0||y<=0||n<=0);
 
     printf("Input the first matrix:\n");
 
@@ -31,7 +31,8 @@ int main(){
         }
     }
 
-    printf("Input the second matrix2\n");
+    printf("Input the second matrix\n");
+    
     for (i=0;i<y;i++){
         for (j=0;j<n;j++){
             scanf("%d",&matrixB[i][j]);
