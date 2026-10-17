@@ -1,4 +1,4 @@
-void mat_mul(matrixA[][MAX_COL],matrixB[][MAX_COL],i,j)
+void mat_mul(int matrixA[][MAX_COL],int matrixB[][MAX_COL],int i,int j)
 {
     for (i=0;i<x;i++){
         for (j=0;j<n;j++){
