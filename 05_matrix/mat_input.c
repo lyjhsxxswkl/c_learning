@@ -1,4 +1,4 @@
-void mat_input(int w)
+void mat_input(int w,int matrixA[][MAX_COL],int matrixB[][MAX_COL])
 {
     do {
         puts("Enter all numbers separated by spaces");

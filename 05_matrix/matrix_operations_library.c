@@ -2,7 +2,7 @@
 #define MAX_COL 100
 #define MAX_ROW 100
 
-void mat_input(int w)
+void mat_input(int w,int matrixA[][MAX_COL],int matrixB[][MAX_COL])
 {
     do {
         puts("Enter all numbers separated by spaces");
