@@ -1,6 +1,5 @@
-#include <stdio.h>
-#define MAX_COL 100
-#define MAX_ROW 100
+#include<stdio.h>
+#include"matrix.h"
 
 int main(void)
 {

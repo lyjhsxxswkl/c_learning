@@ -1,40 +1,43 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include "matrix.h"
+#include<stdio.h>
+#include"matrix.h"
 
-int main(void)
+int main()
 {
-    float matrixA[2][2];
-    float matrixB[2][2];
-    float matrixC[2][2];
-    int i,j;
+    int r=2,c=3;
 
-    srand(time(0));
+Matrix A=create_matrix(r,c);
+Matrix B=create_matrix(r,c);
+Matrix C=create_matrix(r,c);
 
-    for(i=0;i<2;i++){
-        for(j=0;j<2;j++){
-            matrixA[i][j]=(float)(rand()%10);
-            matrixB[i][j]=(float)(rand()%10);
-        }
+printf("Enter number of matrixA");
+
+for(int i=0;i<r;i++){
+    for(int j=0;j<c;j++){
+        scanf("%f",&A.data[i][j]);
     }
-    
-    for(i=0;i<2;i++){
-        for(j=0;j<2;j++){
-            printf("%d",matrixA[i][j]);
-        }
+}
+
+printf("Enter number of matrixB");
+
+for(int i=0;i<r;i++){
+    for(int j=0;j<c;j++){
+        scanf("%f",&B.data[i][j]);
     }
+}
 
-    for(i=0;i<2;i++){
-        for(j=0;j<2;j++){
-            printf("%d",matrixB[i][j]);
-        }
-    }    
+mat_add(&A,&B,&C);
 
-    mat_add(matrixA,matrixB,2,2);
+puts("\nThe result is:");
 
-    for(i=0;i<2;i++){
-        for(j=0;j<2;j++){
-            printf("%d",matrixC[i][j]);
-        }
+for(int i=0;i<C.row;i++){
+    for(int j=0;j<C.col;j++){
+        printf("%.2f",C.data[i][j]);
+    }
+}
+
+free_matrix(&A);
+free_matrix(&B);
+free_matrix(&C);
+
+return 0;
 }
