@@ -8,7 +8,12 @@ typedef struct{
 }Matrix;
 
 Matrix create_matrix(int r, int c);
+
 void free_matrix(Matrix *m);
 void mat_add(const Matrix *A,const Matrix *B,Matrix *C);
+void mat_dif(const Matrix *A,const Matrix *B,Matrix *C);
+int mat_ran(const Matrix *A);
+void mat_inv(Matrix *A,Matrix *B);
+float mat_det(const Matrix *A);
 
 #endif

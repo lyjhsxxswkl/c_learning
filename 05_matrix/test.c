@@ -3,13 +3,13 @@
 
 int main()
 {
-    int r=2,c=3;
+    int r=3,c=3;
 
 Matrix A=create_matrix(r,c);
-Matrix B=create_matrix(r,c);
-Matrix C=create_matrix(r,c);
+/*Matrix B=create_matrix(r,c);
+Matrix C=create_matrix(r,c);*/
 
-printf("Enter number of matrixA");
+printf("Enter number of matrixA:\n");
 
 for(int i=0;i<r;i++){
     for(int j=0;j<c;j++){
@@ -17,7 +17,9 @@ for(int i=0;i<r;i++){
     }
 }
 
-printf("Enter number of matrixB");
+float result=mat_det(&A);
+/*
+printf("/nEnter number of matrixB:/n");
 
 for(int i=0;i<r;i++){
     for(int j=0;j<c;j++){
@@ -34,10 +36,12 @@ for(int i=0;i<C.row;i++){
         printf("%.2f",C.data[i][j]);
     }
 }
+*/
 
+printf("%.2f",result);
 free_matrix(&A);
-free_matrix(&B);
-free_matrix(&C);
+/*free_matrix(&B);
+free_matrix(&C);*/
 
 return 0;
 }
