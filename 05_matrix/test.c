@@ -6,20 +6,24 @@ int main()
     int r=3,c=3;
 
 Matrix A=create_matrix(r,c);
-/*Matrix B=create_matrix(r,c);
-Matrix C=create_matrix(r,c);*/
+Matrix B=create_matrix(r,c);
+/*Matrix C=create_matrix(r,c);*/
 
-printf("Enter number of matrixA:\n");
+printf("Enter number of matrix A:\n");
 
 for(int i=0;i<r;i++){
     for(int j=0;j<c;j++){
-        scanf("%f",&A.data[i][j]);
+        scanf("%lf",&A.data[i][j]);
     }
 }
 
-float result=mat_det(&A);
-/*
-printf("/nEnter number of matrixB:/n");
+int test=mat_inv(&A,&B);
+if(test=0){
+    puts("Your matrix haven't inv");
+}else{
+/*float result=mat_det(&A);
+
+printf("/nEnter number of matrix B:/n");
 
 for(int i=0;i<r;i++){
     for(int j=0;j<c;j++){
@@ -38,10 +42,15 @@ for(int i=0;i<C.row;i++){
 }
 */
 
-printf("%.2f",result);
+for(int i=0;i<B.row;i++){
+    for(int j=0;j<B.col;j++){
+        printf("%.1f ",B.data[i][j]);
+    }
+}
+/*printf("%.2f",result);*/
 free_matrix(&A);
-/*free_matrix(&B);
-free_matrix(&C);*/
-
+free_matrix(&B);
+/*free_matrix(&C);*/
+}
 return 0;
 }
