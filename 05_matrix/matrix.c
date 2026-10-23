@@ -9,11 +9,11 @@ Matrix create_matrix(int r, int c)
     m.row = r;
     m.col = c;
 
-    m.data = (float **)malloc(r * sizeof(float *));
+    m.data = (MAT_TYPE **)malloc(r * sizeof(MAT_TYPE *));
 
     for (int i = 0; i < c; i++)
     {
-        m.data[i] = (float *)malloc(sizeof(float));
+        m.data[i] = (MAT_TYPE *)malloc(sizeof(MAT_TYPE));
     }
     return m;
 }
@@ -51,13 +51,17 @@ void mat_dif(const Matrix *A, const Matrix *B, Matrix *C)
     }
 }
 
-void mat_mul(const Matrix *A, const Matrix *B, Matrix *C){
+void mat_mul(const Matrix *A, const Matrix *B, Matrix *C)
+{
 
-    for (int i=0;i<A->row;i++){
-        for (int j=0;j<B->col;j++){
-            C->data[i][j]=0;
-            for (int k=0;k<A->col;k++){
-                C->data[i][j]+=A->data[i][k]*B->data[k][j];
+    for (int i = 0; i < A->row; i++)
+    {
+        for (int j = 0; j < B->col; j++)
+        {
+            C->data[i][j] = 0;
+            for (int k = 0; k < A->col; k++)
+            {
+                C->data[i][j] += A->data[i][k] * B->data[k][j];
             }
         }
     }
@@ -65,7 +69,7 @@ void mat_mul(const Matrix *A, const Matrix *B, Matrix *C){
 
 int mat_ran(const Matrix *A)
 {
-    int z = 0;
+    MAT_TYPE z = 0;
     int rank = 0;
     Matrix copy = create_matrix(A->row, A->col);
 
@@ -97,10 +101,13 @@ int mat_ran(const Matrix *A)
             continue;
         }
 
-        /*chang the main element to the first row*/
+        /*change the main element to the first row*/
         for (int j = 0; j < A->col; j++)
         {
-            float temp;
+            if(n==o){
+                break;
+            }
+            MAT_TYPE temp;
             temp = copy.data[o][j];
             copy.data[o][j] = copy.data[n][j];
             copy.data[n][j] = temp;
@@ -130,7 +137,7 @@ int mat_ran(const Matrix *A)
     return rank;
 }
 
-void mat_inv(Matrix *A, Matrix *B)
+int  mat_inv(const Matrix *A, Matrix *B)
 {
     /*create a identity matrix*/
 
@@ -146,16 +153,99 @@ void mat_inv(Matrix *A, Matrix *B)
         }
     }
 
-    /*check if matrix is */
+    /*copy matrix A*/
+    Matrix copy = create_matrix(A->row, A->col);
+
+    for (int i = 0; i < copy.row; i++)
+    {
+        for (int j = 0; j < copy.col; j++)
+        {
+            copy.data[i][j] = A->data[i][j];
+        }
+    }
+
+    /*Make matrix A become identity, and change matrix B with A*/
+
+    for (int o = 0; o < copy.row; o++)
+    {
+        double z;
+        /*check if main element is 0*/
+        int n = -1;
+        for (int i = o; i < A->row; i++)
+        {
+            if (fabs(copy.data[i][o]) > 1e-6)
+            {
+                n = i;
+                break;
+            }
+        }
+
+        if(n==-1){
+            free_matrix(&copy);
+            return 0;
+        }
+        /*change the main element to the first row*/
+        for (int j = 0; j < A->col; j++)
+        {
+            if(n==o){
+                break;
+            }
+            MAT_TYPE temp1,temp2;
+
+            temp1 = copy.data[o][j];
+            temp2 = B->data[o][j];
+
+            copy.data[o][j] = copy.data[n][j];
+            copy.data[n][j] = temp1;
+            B->data[o][j]=B->data[n][j];
+            B->data[n][j]=temp2;
+        }
+
+        z = copy.data[o][o];
+
+        for (int j = 0; j < copy.col; j++)
+        {
+            copy.data[o][j] /= z;
+            B->data[o][j] /= z;
+        }
+
+        for (int i = o + 1; i < copy.row; i++)
+        {
+            z = copy.data[i][o];
+            for (int j = 0; j < copy.col; j++)
+            {
+                copy.data[i][j] -= z * copy.data[o][j];
+                B->data[i][j] -= z * B->data[o][j];
+            }
+        }
+    }
+
+    for (int o = copy.row - 1; o > 0; o--)
+    {
+        double z;
+
+        for (int i = o - 1; i >= 0; i--)
+        {
+            z = copy.data[i][o];
+            for (int j = copy.col-1; j >= 0; j--)
+            {
+                copy.data[i][j] -= z * copy.data[o][j];
+                B->data[i][j] -= z * B->data[o][j];
+            }
+        }
+    }
+
+    free_matrix(&copy);
+    return 1;
 }
 
-float mat_det(const Matrix *A)
+MAT_TYPE mat_det(const Matrix *A)
 {
     int b = 0;
-    float m = 1;
-    float temp;
-    float det = 1;
-    float z = 0;
+    MAT_TYPE m = 1;
+    MAT_TYPE temp;
+    MAT_TYPE det = 1;
+    MAT_TYPE z = 0;
 
     /*copy matrix A*/
     Matrix copy = create_matrix(A->row, A->col);
@@ -241,4 +331,21 @@ float mat_det(const Matrix *A)
     free_matrix(&copy);
 
     return det;
+}
+
+int check_r_c(MAT_TYPE r, MAT_TYPE c)
+{
+    int a, b;
+    a = (int)r;
+    b = (int)c;
+    r -= a;
+    c -= b;
+    if (fabs(r) < 1e-6 || fabs(c) < 1e-6)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 }
