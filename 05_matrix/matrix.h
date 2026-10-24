@@ -18,5 +18,7 @@ void mat_dif(const Matrix *A, const Matrix *B, Matrix *C);
 int mat_ran(const Matrix *A);
 int mat_inv(const Matrix *A, Matrix *B);
 MAT_TYPE mat_det(const Matrix *A);
+int mat_adj(const Matrix *A, Matrix B);
+MAT_TYPE mat_cof (const Matrix *A)
 
 #endif

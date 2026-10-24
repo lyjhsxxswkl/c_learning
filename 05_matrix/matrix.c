@@ -13,7 +13,7 @@ Matrix create_matrix(int r, int c)
 
     for (int i = 0; i < c; i++)
     {
-        m.data[i] = (MAT_TYPE *)malloc(sizeof(MAT_TYPE));
+        m.data[i] = (MAT_TYPE *)malloc(c*sizeof(MAT_TYPE));
     }
     return m;
 }
@@ -104,7 +104,8 @@ int mat_ran(const Matrix *A)
         /*change the main element to the first row*/
         for (int j = 0; j < A->col; j++)
         {
-            if(n==o){
+            if (n == o)
+            {
                 break;
             }
             MAT_TYPE temp;
@@ -137,7 +138,7 @@ int mat_ran(const Matrix *A)
     return rank;
 }
 
-int  mat_inv(const Matrix *A, Matrix *B)
+int mat_inv(const Matrix *A, Matrix *B)
 {
     /*create a identity matrix*/
 
@@ -180,25 +181,27 @@ int  mat_inv(const Matrix *A, Matrix *B)
             }
         }
 
-        if(n==-1){
+        if (n == -1)
+        {
             free_matrix(&copy);
             return 0;
         }
         /*change the main element to the first row*/
         for (int j = 0; j < A->col; j++)
         {
-            if(n==o){
+            if (n == o)
+            {
                 break;
             }
-            MAT_TYPE temp1,temp2;
+            MAT_TYPE temp1, temp2;
 
             temp1 = copy.data[o][j];
             temp2 = B->data[o][j];
 
             copy.data[o][j] = copy.data[n][j];
             copy.data[n][j] = temp1;
-            B->data[o][j]=B->data[n][j];
-            B->data[n][j]=temp2;
+            B->data[o][j] = B->data[n][j];
+            B->data[n][j] = temp2;
         }
 
         z = copy.data[o][o];
@@ -227,7 +230,7 @@ int  mat_inv(const Matrix *A, Matrix *B)
         for (int i = o - 1; i >= 0; i--)
         {
             z = copy.data[i][o];
-            for (int j = copy.col-1; j >= 0; j--)
+            for (int j = copy.col - 1; j >= 0; j--)
             {
                 copy.data[i][j] -= z * copy.data[o][j];
                 B->data[i][j] -= z * B->data[o][j];
@@ -331,6 +334,65 @@ MAT_TYPE mat_det(const Matrix *A)
     free_matrix(&copy);
 
     return det;
+}
+
+void mat_adj(const Matrix *A,Matrix *B)
+{
+    /*Calculate the cofactor*/
+    for(int i=0;i<A->row;i++){
+        for(int j=0;j<A->col;j++){
+            B->data[i][j]=mat_cof(A,i,j);
+        }
+    }
+
+    /*tranpose matrix B*/
+    mat_tra(B);
+}
+
+MAT_TYPE mat_cof(const Matrix *A, int m, int n)
+{
+    /*copy matrix A that delete its m row and n col*/
+    MAT_TYPE result;
+    Matrix copy = create_matrix(A->row - 1, A->col - 1);
+    int i2 = 0;
+    int j2 = 0;
+    for (int i = 0; i < A->row; i++)
+    {
+
+        if (i == m)
+        {
+            continue;
+        }
+        for (int j = 0; j < A->col; j++)
+        {
+
+            if (j == n)
+            {
+                continue;
+            }
+            copy.data[i2][j2] = A->data[i][j];
+            j2++;
+        }
+        i2++;
+    }
+
+    result = (MAT_TYPE)pow(-1, m + n) * mat_det(&copy);
+
+    free_matrix(&copy);
+
+    return result;
+}
+
+void mat_tra(Matrix *A){
+    MAT_TYPE temp;
+
+    for(int i=0;i<A->row;i++){
+        for(int j=i;j<A->row;j++){
+            temp=A->data[i][j];
+            A->data[i][j]=A->data[j][i];
+            A->data[j][i]=temp;
+        }
+    }
 }
 
 int check_r_c(MAT_TYPE r, MAT_TYPE c)
