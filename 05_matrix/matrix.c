@@ -10,10 +10,31 @@ Matrix create_matrix(int r, int c)
     m.col = c;
 
     m.data = (MAT_TYPE **)malloc(r * sizeof(MAT_TYPE *));
+    if (m.data == NULL)
+    {
+        puts("Error: Memory allocation failed!\n");
+        m.row = -1;
+        m.col = -1;
+        return m;
+    }
 
-    for (int i = 0; i < c; i++)
+    for (int i = 0; i < r; i++)
     {
         m.data[i] = (MAT_TYPE *)malloc(c * sizeof(MAT_TYPE));
+        if (m.data[i] == NULL)
+        {
+            puts("Error: Memory allocation failed!\n");
+
+            for (int j = i - 1; j >= 0; j--)
+            {
+                free(m.data[j]);
+            }
+            free(m.data);
+
+            m.row = -1;
+            m.col = -1;
+            return m;
+        }
     }
     return m;
 }
@@ -400,7 +421,7 @@ void mat_tra(Matrix *A)
     }
 }
 
-void mat_input(Matrix *A)
+void mat_input_order(Matrix *A)
 {
     MAT_TYPE r = 0;
     MAT_TYPE c = 0;
@@ -410,28 +431,55 @@ void mat_input(Matrix *A)
     {
         do
         {
-            puts("Please input your matrix's row and col");
-            int status = scanf(MAT_SCANF, &r, &c);
+            puts("Please input your matrix's row and col(separated by space)");
+            int status = scanf(MAT_SCANF MAT_SCANF, &r, &c);
             if (status != 2)
             {
                 puts("you input the error character");
-                while (getchar() !='\n')
+                while (getchar() != '\n')
                     ;
             }
         } while (status != 2);
 
         m = (int)r;
         n = (int)c;
-        if (r < 1e-6 || c < 1e-6 || fabs(r - m) > 1e-6 || fabs(c - n) > 1e-6)
+        if (r < 1e-6 || c < 1e-6 || fabs(r - m) > 1e-6 || fabs(c - n) > 1e-6 || r > 10 || c > 10)
         {
             puts("you input error number");
-            while (getchar() !='\n')
+            while (getchar() != '\n')
                 ;
         }
-       
-    } while (r < 1e-6 || c < 1e-6 || fabs(r - m) > 1e-6 || fabs(c - n) > 1e-6)
-            ;
+
+    } while (r < 1e-6 || c < 1e-6 || fabs(r - m) > 1e-6 || fabs(c - n) > 1e-6 || r > 10 || c > 10);
     A->row = m;
     A->col = n;
 }
 
+int mat_input_data(Matrix *A)
+{
+    puts("Please enter your matrix's data ( separated by space )");
+
+    for (int i = 0; i < A->row; i++)
+    {
+        for (int j = 0; j < A->col; j++)
+        {
+            int status;
+            do
+            {
+
+                status = scanf(MAT_SCANF, &A->data[i][j]);
+                if (status == -1)
+                {
+                    return 0;
+                }
+                if (status != 1 || isinf(A->data[i][j]) != 0 || fabs(A->data[i][j]) > 1e3)
+                {
+                    puts("You enter the character. Please enter number under 1000 again");
+                    int ch = 0;
+                    while ((ch = getchar()) != EOF && ch != '\n')
+                }
+            } while (status != 1 || isinf(A->data[i][j]) != 0 || fabs(A->data[i][j]) > 1e3);
+        }
+    }
+    return 1;
+}
