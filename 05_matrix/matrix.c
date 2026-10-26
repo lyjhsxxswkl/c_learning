@@ -13,7 +13,7 @@ Matrix create_matrix(int r, int c)
 
     for (int i = 0; i < c; i++)
     {
-        m.data[i] = (MAT_TYPE *)malloc(c*sizeof(MAT_TYPE));
+        m.data[i] = (MAT_TYPE *)malloc(c * sizeof(MAT_TYPE));
     }
     return m;
 }
@@ -336,12 +336,14 @@ MAT_TYPE mat_det(const Matrix *A)
     return det;
 }
 
-void mat_adj(const Matrix *A,Matrix *B)
+void mat_adj(const Matrix *A, Matrix *B)
 {
     /*Calculate the cofactor*/
-    for(int i=0;i<A->row;i++){
-        for(int j=0;j<A->col;j++){
-            B->data[i][j]=mat_cof(A,i,j);
+    for (int i = 0; i < A->row; i++)
+    {
+        for (int j = 0; j < A->col; j++)
+        {
+            B->data[i][j] = mat_cof(A, i, j);
         }
     }
 
@@ -383,31 +385,53 @@ MAT_TYPE mat_cof(const Matrix *A, int m, int n)
     return result;
 }
 
-void mat_tra(Matrix *A){
+void mat_tra(Matrix *A)
+{
     MAT_TYPE temp;
 
-    for(int i=0;i<A->row;i++){
-        for(int j=i;j<A->row;j++){
-            temp=A->data[i][j];
-            A->data[i][j]=A->data[j][i];
-            A->data[j][i]=temp;
+    for (int i = 0; i < A->row; i++)
+    {
+        for (int j = i; j < A->row; j++)
+        {
+            temp = A->data[i][j];
+            A->data[i][j] = A->data[j][i];
+            A->data[j][i] = temp;
         }
     }
 }
 
-int check_r_c(MAT_TYPE r, MAT_TYPE c)
+void mat_input(Matrix *A)
 {
-    int a, b;
-    a = (int)r;
-    b = (int)c;
-    r -= a;
-    c -= b;
-    if (fabs(r) < 1e-6 || fabs(c) < 1e-6)
+    MAT_TYPE r = 0;
+    MAT_TYPE c = 0;
+    int m;
+    int n;
+    do
     {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
+        do
+        {
+            puts("Please input your matrix's row and col");
+            int status = scanf(MAT_SCANF, &r, &c);
+            if (status != 2)
+            {
+                puts("you input the error character");
+                while (getchar() !='\n')
+                    ;
+            }
+        } while (status != 2);
+
+        m = (int)r;
+        n = (int)c;
+        if (r < 1e-6 || c < 1e-6 || fabs(r - m) > 1e-6 || fabs(c - n) > 1e-6)
+        {
+            puts("you input error number");
+            while (getchar() !='\n')
+                ;
+        }
+       
+    } while (r < 1e-6 || c < 1e-6 || fabs(r - m) > 1e-6 || fabs(c - n) > 1e-6)
+            ;
+    A->row = m;
+    A->col = n;
 }
+

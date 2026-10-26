@@ -1,5 +1,6 @@
 #ifndef MATRIX_H
 #define MATRIX_H
+#define MAT_SCANF "%lf %lf"
 
 typedef double MAT_TYPE;
 
@@ -19,6 +20,7 @@ int mat_ran(const Matrix *A);
 int mat_inv(const Matrix *A, Matrix *B);
 MAT_TYPE mat_det(const Matrix *A);
 int mat_adj(const Matrix *A, Matrix B);
-MAT_TYPE mat_cof (const Matrix *A)
+void mat_tra(Matrix *A);
+MAT_TYPE mat_cof (const Matrix *A);
 
 #endif
