@@ -466,7 +466,6 @@ int mat_input_data(Matrix *A)
             int status;
             do
             {
-
                 status = scanf(MAT_SCANF, &A->data[i][j]);
                 if (status == -1)
                 {
